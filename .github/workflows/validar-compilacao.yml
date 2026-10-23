@@ -1,8 +1,6 @@
 name: CI - Validar Compilação (C)
 
 on:
-  push:
-    branches: [ main, 'pratica-*' ]
   pull_request:
     branches: [ main ]
 
@@ -50,9 +48,9 @@ jobs:
               continue
             fi
             
-            echo "   Compilando..."
-              
-            if gcc -Wall -Wextra -Werror -std=c11 "$PASTA/*.c" -o "$PASTA/main" -lm 2>&1; then
+            echo "   Compilando $PASTA..."
+
+            if gcc -Wall -Wextra -Werror -std=c11 "$PASTA"/*.c -o "$PASTA"/main -lm 2>&1; then
               echo "   ✅ SUCESSO"
               SUCESSOS=$((SUCESSOS + 1))
             else
