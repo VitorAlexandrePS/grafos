@@ -6,6 +6,7 @@
 typedef struct No
 {
     int vertice;
+    struct dados;
     struct No *proximo;
 } No;
 
