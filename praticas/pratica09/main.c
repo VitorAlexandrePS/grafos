@@ -1,7 +1,16 @@
 
+#ifndef _WIN32
+#define _POSIX_C_SOURCE 200809L
+#endif
+
 #include <stdio.h>
-#include <windows.h>
 #include "cobertura.h"
+
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <time.h>
+#endif
 
 #define MAX_VERTICES 15
 #define MAX_ARESTAS (MAX_VERTICES * (MAX_VERTICES - 1) / 2)
@@ -42,6 +51,9 @@ int gerar_grafo(int n, Aresta *arestas) {
 }
 
 double obter_tempo_ms(void) {
+
+#ifdef _WIN32
+
     LARGE_INTEGER contador;
     LARGE_INTEGER frequencia;
 
@@ -50,6 +62,17 @@ double obter_tempo_ms(void) {
 
     return (double)contador.QuadPart * 1000.0
            / frequencia.QuadPart;
+
+#else
+
+    struct timespec tempo;
+
+    clock_gettime(CLOCK_MONOTONIC, &tempo);
+
+    return (double)tempo.tv_sec * 1000.0
+           + (double)tempo.tv_nsec / 1000000.0;
+
+#endif
 }
 
 // Executa os experimentos para um determinado tamanho.
